@@ -1,7 +1,8 @@
 const path = require("path"),
     fs = require("fs"),
     { validationResult } = require("express-validator/check"),
-    Post = require("../models/post");
+    Post = require("../models/post"),
+    User = require("../models/user");
 
 function clearImage(filePath) {
     filePath = path.join(__dirname, "..", filePath);
@@ -49,20 +50,31 @@ module.exports = {
             error.statusCode = 422;
             throw error;
         }
-        const imageUrl = req.file.path;
+        const imageUrl = req.file.path ;
+        // const imageUrl = "/path/to/image";
         const title = req.body.title;
         const content = req.body.content;
+        let creator;
         const post = new Post({
             title: title,
             content: content,
             imageUrl: imageUrl,
-            creator: { name: "Max" },
+            creator: req.userId,
         });
         post.save()
-            .then((result) => {
+            .then(() => {
+                return User.findById(req.userId);
+            })
+            .then((user) => {
+                user.posts.push(post);
+                creator = user;
+                return user.save();
+            })
+            .then(() => {
                 res.status(201).json({
                     message: "Post created successfully!",
-                    post: result,
+                    post: post,
+                    creator: { id: creator._id, name: creator.name },
                 });
             })
             .catch((err) => {
