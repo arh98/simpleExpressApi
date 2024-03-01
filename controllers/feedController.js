@@ -50,7 +50,7 @@ module.exports = {
             error.statusCode = 422;
             throw error;
         }
-        const imageUrl = req.file.path ;
+        const imageUrl = req.file.path;
         // const imageUrl = "/path/to/image";
         const title = req.body.title;
         const content = req.body.content;
@@ -132,6 +132,11 @@ module.exports = {
                     error.statusCode = 404;
                     throw error;
                 }
+                if (post.creator.id.toString() !== req.userId) {
+                    const error = new Error("Athorization Error!");
+                    error.statusCode = 403;
+                    throw error;
+                }
                 if (imageUrl !== post.imageUrl) {
                     clearImage(post.imageUrl);
                 }
@@ -163,9 +168,19 @@ module.exports = {
                     error.statusCode = 404;
                     throw error;
                 }
-                // Check logged in user
+                if (post.creator.id.toString() !== req.userId) {
+                    const error = new Error("Athorization Error!");
+                    error.statusCode = 403;
+                    throw error;
+                }
                 clearImage(post.imageUrl);
                 return Post.findByIdAndRemove(postId);
+            })
+            .then(() => {
+                return User.findByIdAndRemove(req.userId);
+            })
+            .then((user) => {
+                return user.posts.pull(postId);
             })
             .then((result) => {
                 console.log(result);
