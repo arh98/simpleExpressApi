@@ -1,6 +1,5 @@
 
-This is a simple api to managing users and their posts with three communication protocol/style:\
-Rest , WebSocket , Graphql
+a simple api to managing users and their posts with : Rest , WebSocket
 
 ## Getting Started
 
@@ -25,8 +24,6 @@ this will start the server on `http://localhost:3000`
 - `Node.js`: a server-side JavaScript runtime environment for building scalable and efficient network applications
 - `Express`: a popular Node.js web application framework for building APIs and web applications
 - `Socket.IO` :  a library that enables low-latency, bidirectional and event-based communication between a client and a server.
-- `Graphql` : GraphQL is a query language for APIs and a runtime for fulfilling those queries with your existing data.
-- `express-graphql` : Create a GraphQL HTTP server with any HTTP web framework that supports connect styled middleware, including Connect itself and Express.
 - `MongoDB`: a popular NoSQL database for storing and querying large volumes of unstructured data
 - `Mongoose`: an Object Data Modeling (ODM) library for MongoDB and Node.js that provides a more intuitive way to interact with MongoDB
 - `JWT`: a widely-used standard for representing and transmitting secure authentication and authorization information
