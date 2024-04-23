@@ -58,9 +58,16 @@ app.use((error, req, res, next) => {
 
 mongoose
     .set("strictQuery", false)
-    .connect("mongodb://localhost:27017/feedsdb")
+    .connect("mongodb://127.0.0.1:27017/feeds")
     .then((result) => {
-        app.listen(3000);
+        const server = app.listen(3000);
+        const io = require('./socket.js').init(server);
+        io.on('connection' , socket =>{
+            console.log('New client connected');
+            socket.on('disconnect' , () =>{
+                console.log('Client disconnected');
+            });
+        });
         console.log("Connected to DB - Listening on port : 3000");
     })
     .catch((err) => console.log(err));
